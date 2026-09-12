@@ -9,25 +9,31 @@ The npm package bundles the complete skill and a dependency-free local installer
 It does not fetch skill files from GitHub. Requires Node.js 20 or later and npm.
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 install --agent codex
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --agent codex
 ```
 
 Replace `codex` with `claude-code` or `cursor`. For another client, inspect its documented
 personal skills directory and use `install --dir /absolute/path/to/skills` instead.
 The installer creates `onimi-pages-publish` inside that parent directory. It preserves
-existing installations: move the old folder aside before installing an update.
-Run `npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help` for options.
+existing installations. Run
+`npx --registry=https://registry.npmjs.org onimi-pages-publish@latest --help` for options.
 Only install for the current agent. Restart or reload that agent if needed.
+
+Check the verified channel states in
+https://downloads.onimi.ai/skills/manifest.json before using a registry source. Run the
+`@latest` npm command only when the npm channel is marked available; otherwise use
+another channel marked available in that manifest.
 
 ## Direct download
 
-Download the archive and checksum from Cloudflare:
+Use the stable latest entry, which redirects to one immutable, versioned archive:
 
-- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip
-- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS
+- https://onimi.ai/skills/publish/latest
+- https://downloads.onimi.ai/skills/manifest.json
 
-Verify with `shasum -a 256` (macOS), `sha256sum` (Linux), or PowerShell
-`Get-FileHash -Algorithm SHA256`, and compare against SHA256SUMS before extracting.
+Read the `publish.archive.sha256` value from the stable manifest. Verify the downloaded
+archive with `shasum -a 256` (macOS), `sha256sum` (Linux), or PowerShell
+`Get-FileHash -Algorithm SHA256` before extracting.
 The ZIP contains one complete `onimi-pages-publish/` directory; copy it intact into
 only your current agent's personal skills directory. Do not overwrite local changes.
 
@@ -43,7 +49,7 @@ Listing: https://clawhub.ai/mariohazy/onimi-pages-publish
 Publisher: `mariohazy`; skill: `@mariohazy/onimi-pages-publish`.
 
 ```sh
-npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish --version 0.1.1
+npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish
 ```
 
 ClawHub installs into its configured workspace skill directory by default. Use its
@@ -63,6 +69,14 @@ Select only the current agent. If it cannot run commands, use its documented ski
 import UI or copy the complete `skills/onimi-pages-publish` folder from the repository.
 Other clients require their own custom-skill and remote MCP support; a brand name
 alone does not establish compatibility in every desktop, web or mobile version.
+
+For a direct-download installation, run `node scripts/manage.mjs status` locally,
+`node scripts/manage.mjs check` for the daily non-blocking update check, and only
+after approving the displayed version run
+`node scripts/manage.mjs update --confirm onimi-pages-publish@<version>`.
+The manager protects all edits and additional files, verifies the immutable archive,
+keeps a backup, and atomically rolls back a failed switch. npm, ClawHub, GitHub, and
+agent-host update commands remain specific to those channels.
 
 ## Configure the connection
 

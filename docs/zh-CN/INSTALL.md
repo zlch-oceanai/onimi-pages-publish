@@ -9,29 +9,31 @@ npm 包内置完整 Skill 和无第三方依赖的本地安装器，不从 GitHu
 需要 Node.js 20 或以上版本，以及 npm。
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 install --agent codex --lang zh-CN
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --agent codex --lang zh-CN
 ```
 
 将 `codex` 替换为 `claude-code` 或 `cursor`，只安装到当前 Agent。
 其他客户端请先查明个人技能目录，再使用 `install --dir /技能父目录的绝对路径 --lang zh-CN`。
 安装器会在父目录内创建 `onimi-pages-publish` 文件夹；已有目录会保留并停止安装。
-更新前先将旧目录移走备份。安装后按需重新加载 Agent。
+安装后按需重新加载 Agent。使用市场渠道前，请查看
+https://downloads.onimi.ai/skills/manifest.json 中的已验证渠道状态。npm 渠道标记为可用时
+再运行上面的 `@latest` 命令；尚不可用时，请选择清单中另一个已标记为可用的渠道。
 
 查看完整参数：
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest --help
 ```
 
 ## 直接下载
 
-通过 Cloudflare 下载版本固定的 ZIP 和校验值：
+使用稳定 latest 入口。它会跳转到不可变、带版本号的 ZIP：
 
-- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip
-- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS
+- https://onimi.ai/skills/publish/latest
+- https://downloads.onimi.ai/skills/manifest.json
 
 macOS 使用 `shasum -a 256`，Linux 使用 `sha256sum`，PowerShell 使用
-`Get-FileHash -Algorithm SHA256`，将结果与 SHA256SUMS 比较后再解压。
+`Get-FileHash -Algorithm SHA256`，与稳定清单中的 `publish.archive.sha256` 比较后再解压。
 将完整的 `onimi-pages-publish/` 文件夹放进当前 Agent 的个人技能父目录，不要只复制
 SKILL.md，也不要覆盖已有的个人修改。
 
@@ -48,7 +50,7 @@ SKILL.md，也不要覆盖已有的个人修改。
 核对发布者为 `mariohazy`，技能为 `@mariohazy/onimi-pages-publish`：
 
 ```sh
-npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish --version 0.1.1
+npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish
 ```
 
 默认安装到 ClawHub 配置的工作区技能目录。通过 `--workdir` 和 `--dir` 指定当前 Agent
@@ -65,6 +67,13 @@ npx --registry=https://registry.npmjs.org skills@1.5.26 add zlch-oceanai/onimi-p
 
 只选择当前 Agent 和个人安装范围。不能运行命令的客户端，使用其技能导入入口，
 或复制仓库中完整的 `skills/onimi-pages-publish` 文件夹。
+
+直接下载的安装可运行 `node scripts/manage.mjs status` 离线检查本地状态，
+运行 `node scripts/manage.mjs check` 做每天最多一次、失败不阻塞的更新检查。
+用户明确同意所显示的版本后，才运行
+`node scripts/manage.mjs update --confirm onimi-pages-publish@<版本>`。
+管理器会保护所有修改与新增文件、校验不可变归档、保留备份，并在切换失败时回滚。
+npm、ClawHub、GitHub 和 Agent 宿主的更新命令由各渠道分别管理。
 
 ## 配置连接与授权
 

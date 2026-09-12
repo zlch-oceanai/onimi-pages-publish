@@ -1,7 +1,7 @@
 {
   "name": "onimi-pages-publish",
-  "version": "0.1.1",
-  "description": "Publish HTML with Onimi Pages using browser-authorized Remote MCP. Bundled skill and local installer.",
+  "version": "0.2.0",
+  "description": "Publish HTML with Onimi Pages using browser-authorized Remote MCP.",
   "type": "module",
   "license": "MIT-0",
   "engines": {

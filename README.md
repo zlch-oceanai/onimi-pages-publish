@@ -6,20 +6,22 @@ Publish an HTML page from your agent through browser-authorized Remote MCP.
 
 ## Install
 
-**npm publication is pending. Use Cloudflare direct download or ClawHub below for now.**
+Check the [verified channel states](https://downloads.onimi.ai/skills/manifest.json)
+before choosing a registry source. Use npm's `latest` release only when the npm
+channel is marked available; otherwise install through another channel marked available.
 
 Copy this prompt into your agent:
 
-> Download the Onimi Pages skill from https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip and verify it against SHA256SUMS in the same directory. Install the complete folder for only my current agent, preserving any existing installation. Follow the bundled connection guide to add `https://onimi.ai/mcp` and start browser OAuth. Let me sign in and approve access. Afterward, check the connection with `onimi_list_projects`. Do not create a project or publish anything yet.
+> Download the Onimi Pages Publish skill from https://onimi.ai/skills/publish/latest and verify its SHA-256 against https://downloads.onimi.ai/skills/manifest.json. Install the complete folder for only my current agent, preserving any existing installation. Follow the bundled connection guide to add `https://onimi.ai/mcp` and start browser OAuth. Let me sign in and approve access. Afterward, check the connection with `onimi_list_projects`. Do not create a project or publish anything yet.
 
 Every source includes the complete skill. Installation and browser authorization
 are separate steps. See the [installation guide](INSTALL.md) for client-specific commands.
 
 Other installation sources:
 
-- [npm](https://www.npmjs.com/package/onimi-pages-publish): `npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help`
+- [npm](https://www.npmjs.com/package/onimi-pages-publish): `npx --registry=https://registry.npmjs.org onimi-pages-publish@latest --help`
 
-- [Direct download from Cloudflare](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip) · [SHA-256](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS)
+- [Stable direct download](https://onimi.ai/skills/publish/latest) · [version and SHA-256 manifest](https://downloads.onimi.ai/skills/manifest.json)
 - [ClawHub: @mariohazy/onimi-pages-publish](https://clawhub.ai/mariohazy/onimi-pages-publish)
 - GitHub: `npx --registry=https://registry.npmjs.org skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish --global`
 
@@ -55,11 +57,12 @@ The repository contains public distribution files only. It excludes private appl
 code and credentials. The skill and installer use MIT-0, compatible with ClawHub's
 publishing terms. Hosted service terms are separate.
 
-## 0.1.1
+## 0.2.0
 
-- Bundled npm installer, Cloudflare downloads and native ClawHub distribution.
+- Stable manifest, immutable archives and a local-change-safe update manager.
 - Separate English and Chinese installation guides; English remains the default.
 - English and Chinese walkthrough videos and posters.
 
-Review changes before updating. The installer preserves existing directories;
-move the previous installation aside before installing a new version.
+Review changes before updating. Direct-download installs can use
+`node scripts/manage.mjs status|check|update`; update requires explicit confirmation
+and keeps a verified backup. npm, GitHub and ClawHub use their own update semantics.
