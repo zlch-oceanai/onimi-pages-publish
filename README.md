@@ -10,7 +10,7 @@ Hosting and real-client acceptance are separate release gates.
 ## Install / 安装
 
 ```sh
-npx skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish
+npx skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish --global
 ```
 
 Select your current agent and personal installation scope. Then follow

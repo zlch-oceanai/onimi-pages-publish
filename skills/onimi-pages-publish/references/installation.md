@@ -14,7 +14,7 @@ Official repository: https://github.com/zlch-oceanai/onimi-pages-publish
 Use the npm-distributed Skills CLI (the skill itself comes from GitHub):
 
 ```sh
-npx skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish
+npx skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish --global
 ```
 
 Select only the current agent and personal/global scope. Do not install to every
