@@ -6,13 +6,17 @@
 
 ## 安装
 
+**npm 正在完成上架，目前请使用下方的 Cloudflare 直接下载或 ClawHub 安装。**
+
 把下面的提示词复制到当前 Agent：
 
-> 请运行 `npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help`，确认当前 Agent 的个人技能目录并执行对应安装命令，使用 `--lang zh-CN` 显示中文说明。按照安装包内的连接指南添加 `https://onimi.ai/mcp` 并发起浏览器 OAuth，让我完成登录和权限确认。授权后调用 `onimi_list_projects` 验证连接。本次只安装和连接，不创建项目或发布页面。
+> 请从 https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip 下载 Onimi Pages Skill，用同目录的 SHA256SUMS 校验后，将完整文件夹安装到当前 Agent 的个人技能目录，保留已有安装。阅读安装包内的中文连接指南，添加 `https://onimi.ai/mcp` 并发起浏览器 OAuth，让我完成登录和权限确认。授权后调用 `onimi_list_projects` 验证连接。本次只安装和连接，不创建项目或发布页面。
 
-npm 包自带完整 Skill 文件。安装与浏览器授权是两个步骤，具体命令见[安装说明](INSTALL.md)。
+各来源均提供完整 Skill 文件。安装与浏览器授权是两个步骤，具体命令见[安装说明](INSTALL.md)。
 
 也可以选择其他安装来源：
+
+- [npm](https://www.npmjs.com/package/onimi-pages-publish)：`npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help`
 
 - [Cloudflare 直接下载](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip) · [SHA-256 校验值](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS)
 - [ClawHub：@mariohazy/onimi-pages-publish](https://clawhub.ai/mariohazy/onimi-pages-publish)

@@ -6,14 +6,18 @@ Publish an HTML page from your agent through browser-authorized Remote MCP.
 
 ## Install
 
+**npm publication is pending. Use Cloudflare direct download or ClawHub below for now.**
+
 Copy this prompt into your agent:
 
-> Install Onimi Pages using `npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help`. Choose only my current agent's personal skills directory, run the matching install command, then follow the bundled connection guide to add `https://onimi.ai/mcp` and start browser OAuth. Let me sign in and approve access. Afterward, check the connection with `onimi_list_projects`. Do not create a project or publish anything yet.
+> Download the Onimi Pages skill from https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip and verify it against SHA256SUMS in the same directory. Install the complete folder for only my current agent, preserving any existing installation. Follow the bundled connection guide to add `https://onimi.ai/mcp` and start browser OAuth. Let me sign in and approve access. Afterward, check the connection with `onimi_list_projects`. Do not create a project or publish anything yet.
 
-The npm package includes all skill files. Installation and browser authorization
+Every source includes the complete skill. Installation and browser authorization
 are separate steps. See the [installation guide](INSTALL.md) for client-specific commands.
 
 Other installation sources:
+
+- [npm](https://www.npmjs.com/package/onimi-pages-publish): `npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help`
 
 - [Direct download from Cloudflare](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip) · [SHA-256](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS)
 - [ClawHub: @mariohazy/onimi-pages-publish](https://clawhub.ai/mariohazy/onimi-pages-publish)
