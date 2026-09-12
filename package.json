@@ -1,0 +1,41 @@
+{
+  "name": "onimi-pages-publish",
+  "version": "0.1.1",
+  "description": "Publish HTML with Onimi Pages using browser-authorized Remote MCP. Bundled skill and local installer.",
+  "type": "module",
+  "license": "MIT-0",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "onimi-pages-publish": "bin/install.mjs"
+  },
+  "files": [
+    "bin/install.mjs",
+    "skills/onimi-pages-publish",
+    "INSTALL.md",
+    "docs/zh-CN/INSTALL.md",
+    "docs/zh-CN/README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zlch-oceanai/onimi-pages-publish.git"
+  },
+  "homepage": "https://onimi.ai/how-to",
+  "bugs": {
+    "url": "https://github.com/zlch-oceanai/onimi-pages-publish/issues"
+  },
+  "keywords": [
+    "agent-skill",
+    "mcp",
+    "html",
+    "onimi",
+    "codex",
+    "claude-code",
+    "cursor"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

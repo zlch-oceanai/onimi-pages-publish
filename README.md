@@ -1,49 +1,61 @@
 # Onimi Pages Publish
 
-**English** | [简体中文](README.zh-CN.md)
+**English** | [简体中文](docs/zh-CN/README.md)
 
 Publish an HTML page from your agent through browser-authorized Remote MCP.
 
-**Distribution candidate**: installing this package is not a claim
-of production service readiness, client OAuth acceptance or marketplace listing.
-Hosting and real-client acceptance are separate release gates.
-
 ## Install
 
-```sh
-npx skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish --global
-```
+Copy this prompt into your agent:
 
-Select your current agent and personal installation scope. Then follow
-[INSTALL.md](INSTALL.md) to configure the connection and start browser authorization.
-No API keys or tokens need to be pasted into chat.
+> Install Onimi Pages using `npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help`. Choose only my current agent's personal skills directory, run the matching install command, then follow the bundled connection guide to add `https://onimi.ai/mcp` and start browser OAuth. Let me sign in and approve access. Afterward, check the connection with `onimi_list_projects`. Do not create a project or publish anything yet.
 
-- [Download ZIP](dist/onimi-pages-publish-0.1.0.zip) · [SHA-256](dist/SHA256SUMS)
-- [Installation and connection guide](INSTALL.md)
-- [How it works](https://onimi.ai/how-to)
-- [Help center](https://onimi.ai/help)
+The npm package includes all skill files. Installation and browser authorization
+are separate steps. See the [installation guide](INSTALL.md) for client-specific commands.
 
-Example: “Publish product.html to Onimi Pages, create a new project called
-Product intro, and send me the link.”
+Other installation sources:
 
-## Package
+- [Direct download from Cloudflare](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip) · [SHA-256](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS)
+- [ClawHub: @mariohazy/onimi-pages-publish](https://clawhub.ai/mariohazy/onimi-pages-publish)
+- GitHub: `npx --registry=https://registry.npmjs.org skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish --global`
 
-The skill describes the workflow; the remote service implements project listing,
-project creation and HTML publishing. Each project holds one page. Stable links
-follow the active release; version links use `?version=vN`.
+Service availability and client OAuth support depend on the hosted deployment and
+client version. A published package does not establish production service acceptance.
 
-This repository contains only the public skill, installation documentation and
-download archive. It does not contain the private Onimi Pages application or secrets.
-The skill and its documentation are MIT licensed. The hosted service has separate terms.
+## Watch the walkthrough
 
-## Updates
+[![An agent publishing an HTML page](media/publish-demo-en.png)](media/publish-demo-en.mp4)
 
-Reinstall from the official repository to update. Review changes before updating.
-The ZIP and SHA256SUMS are versioned together. Third-party indexing may lag;
-use this repository if an official listing cannot be found.
+[Play or download the 22-second video](media/publish-demo-en.mp4) · [Interactive example](https://onimi.ai/how-to)
 
-## 0.1.0
+The video is an illustrative interface with sample content; it does not operate an account.
 
-- Browser OAuth / PKCE connection workflow.
-- Project discovery, explicit project creation and HTML publication.
-- Per-client installation guide and deterministic ZIP with SHA-256.
+## Use
+
+> Publish product.html to Onimi Pages. Create a new project called Product intro and send me the link.
+
+Your agent reads the HTML, creates the requested project and publishes the page.
+It returns a stable link and a version link (`?version=vN`). One project holds one page.
+Manage sharing and revoke agent access in the [dashboard](https://onimi.ai/dashboard).
+See the [help center](https://onimi.ai/help) for details.
+
+## Repository layout
+
+- `skills/onimi-pages-publish/`: skill, connection references and MCP dependency declaration.
+- `bin/`: dependency-free npm installer; no automatic lifecycle scripts.
+- `docs/zh-CN/`: Chinese README and installation guide.
+- `media/`: English and Chinese videos and posters, excluded from npm and ClawHub packages.
+- `dist/`: reproducible skill archives and checksums.
+
+The repository contains public distribution files only. It excludes private application
+code and credentials. The skill and installer use MIT-0, compatible with ClawHub's
+publishing terms. Hosted service terms are separate.
+
+## 0.1.1
+
+- Bundled npm installer, Cloudflare downloads and native ClawHub distribution.
+- Separate English and Chinese installation guides; English remains the default.
+- English and Chinese walkthrough videos and posters.
+
+Review changes before updating. The installer preserves existing directories;
+move the previous installation aside before installing a new version.

@@ -1,46 +1,70 @@
-# Install Onimi Pages / 安装与连接
+# Install Onimi Pages
 
-This is a distribution candidate. Installing files does not prove that the hosted
-service or a client integration has passed production acceptance. Official agent
-marketplace listings are separate from this public repository.
+Choose one installation source, then connect your current agent using the guide below.
+Installation does not authorize access or establish production service readiness.
 
-这是分发候选包。安装成功不代表生产服务或当前客户端已完成授权发布验收。
-官方 Agent 市场上架与此公开仓库是不同的分发渠道。
+## npm
 
-## Install the skill / 安装 Skill
+The npm package bundles the complete skill and a dependency-free local installer.
+It does not fetch skill files from GitHub. Requires Node.js 20 or later and npm.
+
+```sh
+npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 install --agent codex
+```
+
+Replace `codex` with `claude-code` or `cursor`. For another client, inspect its documented
+personal skills directory and use `install --dir /absolute/path/to/skills` instead.
+The installer creates `onimi-pages-publish` inside that parent directory. It preserves
+existing installations: move the old folder aside before installing an update.
+Run `npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help` for options.
+Only install for the current agent. Restart or reload that agent if needed.
+
+## Direct download
+
+Download the archive and checksum from Cloudflare:
+
+- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip
+- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS
+
+Verify with `shasum -a 256` (macOS), `sha256sum` (Linux), or PowerShell
+`Get-FileHash -Algorithm SHA256`, and compare against SHA256SUMS before extracting.
+The ZIP contains one complete `onimi-pages-publish/` directory; copy it intact into
+only your current agent's personal skills directory. Do not overwrite local changes.
+
+| Client | Personal skills parent directory |
+| --- | --- |
+| Codex | `~/.agents/skills` |
+| Claude Code | `~/.claude/skills` |
+| Cursor | `~/.cursor/skills` |
+
+## ClawHub
+
+Listing: https://clawhub.ai/mariohazy/onimi-pages-publish
+Publisher: `mariohazy`; skill: `@mariohazy/onimi-pages-publish`.
+
+```sh
+npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish --version 0.1.1
+```
+
+ClawHub installs into its configured workspace skill directory by default. Use its
+`--workdir` and `--dir` options to select only the current agent's documented skill
+parent directory, or move the complete downloaded folder there. Run `clawhub --help`
+to check these options. Do not bypass registry security review if a release is pending.
+
+## GitHub
 
 Official repository: https://github.com/zlch-oceanai/onimi-pages-publish
 
-Use the npm-distributed Skills CLI (the skill itself comes from GitHub):
-
 ```sh
-npx skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish --global
+npx --registry=https://registry.npmjs.org skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish --global
 ```
 
-Select only the current agent and personal/global scope. Do not install to every
-detected client automatically. If the client cannot execute commands, use its
-documented skill-import UI or copy the complete `skills/onimi-pages-publish` folder.
+Select only the current agent. If it cannot run commands, use its documented skill
+import UI or copy the complete `skills/onimi-pages-publish` folder from the repository.
+Other clients require their own custom-skill and remote MCP support; a brand name
+alone does not establish compatibility in every desktop, web or mobile version.
 
-只选择当前 Agent 和个人安装范围。不能运行命令的客户端，请使用其技能导入入口，
-或复制完整的 `skills/onimi-pages-publish` 文件夹，不要只复制 SKILL.md。
-
-| Client | Personal skill directory |
-| --- | --- |
-| Codex | `~/.agents/skills/onimi-pages-publish` |
-| Claude Code | `~/.claude/skills/onimi-pages-publish` |
-| Cursor | `~/.cursor/skills/onimi-pages-publish` |
-
-Other clients: follow their current custom-skill documentation. A familiar brand
-name is not proof that every desktop, web or mobile version supports this workflow.
-
-## Direct download / 直接下载
-
-Download `dist/onimi-pages-publish-0.1.0.zip` and `dist/SHA256SUMS` from the official
-repository. Verify the ZIP using `shasum -a 256` (macOS), `sha256sum` (Linux), or
-PowerShell `Get-FileHash -Algorithm SHA256`. Compare with SHA256SUMS before extracting.
-The archive contains a single `onimi-pages-publish/` directory. Install it intact.
-
-## Configure the connection / 配置连接
+## Configure the connection
 
 Remote MCP: `https://onimi.ai/mcp` (Streamable HTTP, browser OAuth with PKCE).
 No static Authorization header or developer token is needed. Skill installation
@@ -85,14 +109,12 @@ Use the installed client's `/mcp-config` setup to add the HTTP service, then
 `/mcp-config login onimi-pages` to start browser authorization. Check the client's
 help for version-specific setup syntax.
 
-### Other clients / 其他客户端
+### Other clients
 
 Use the client's documented custom remote MCP connection screen. Add the URL
 above and start its OAuth flow. Do not substitute an API key when OAuth is missing.
-WorkBuddy、千问办公、豆包桌面端、百度搭子等产品需分别核对当前版本是否支持自定义
-Skill、远程 MCP 和浏览器 OAuth；不能仅凭内置技能功能宣称兼容。
 
-## Browser approval and verification / 浏览器授权与验证
+## Browser approval and verification
 
 The user signs in to Onimi Pages if needed, reviews requested scopes, and approves
 the connection. The agent must not click consent for the user or request tokens in
@@ -107,17 +129,3 @@ needed. This does not take already published pages offline.
 If discovery returns 404, a protection page or a login HTML document, installation
 cannot repair the hosted service. Explain the unavailable connection; do not report
 success or switch endpoints to a test environment. Dashboard upload is the fallback.
-
-## Third-party directories / 第三方市场
-
-Search skills.sh for `onimi-pages-publish` by `zlch-oceanai`. Confirm the official
-repository before installing. If not indexed, use the GitHub installation above.
-Directory indexing does not imply endorsement or an official agent-marketplace listing.
-
-## Sources
-
-- https://github.com/vercel-labs/skills
-- https://learn.chatgpt.com/docs/extend/mcp?surface=cli
-- https://code.claude.com/docs/en/mcp
-- https://cursor.com/docs/context/mcp
-- https://www.kimi.com/code/docs/en/kimi-code-cli/customization/mcp.html

@@ -2,7 +2,7 @@
 name: onimi-pages-publish
 description: Publish one generated HTML page through the Onimi Pages Remote MCP connector. Use when the user asks to upload, share, preview, or publish HTML with Onimi Pages, including from WorkBuddy or a coding agent.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Onimi Pages Publish
@@ -12,6 +12,8 @@ Use the Onimi Pages Remote MCP tools. Never ask the user to paste an API key, ac
 ## Connect
 
 Read [installation.md](references/installation.md) for complete installation and client-specific connection steps. Skill installation and MCP authorization are separate steps.
+
+For a Chinese-language conversation, use [the Chinese installation guide](references/installation.zh-CN.md).
 
 - Remote MCP URL: `https://onimi.ai/mcp`.
 - On first use, allow the agent host to open the browser. The user signs in to Onimi Pages and approves the requested scopes there.
