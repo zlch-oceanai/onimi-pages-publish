@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "channel": "stable",
+  "skills": {
+    "creator": {
+      "name": "onimi-pages-creator",
+      "version": "0.1.0",
+      "minimumNode": "20.0.0",
+      "releaseNotes": {
+        "en": "Initial release for creating and validating self-contained HTML in the user's own agent workspace.",
+        "zh-CN": "首个版本：在用户自己的 Agent 工作区中创建并校验自包含 HTML。"
+      },
+      "archive": {
+        "url": "https://downloads.onimi.ai/skills/onimi-pages-creator/0.1.0/onimi-pages-creator-0.1.0.zip",
+        "sha256": "d921d81d591fbce004218f2bd2b2e92dab1a3a672e9100f1c1836dec97ae4af3",
+        "size": 20764
+      },
+      "channels": {
+        "direct": {
+          "available": true,
+          "version": "0.1.0",
+          "url": "https://downloads.onimi.ai/skills/onimi-pages-creator/0.1.0/onimi-pages-creator-0.1.0.zip"
+        },
+        "github": {
+          "available": false,
+          "version": null,
+          "url": "https://github.com/zlch-oceanai/onimi-pages-creator"
+        },
+        "npm": {
+          "available": false,
+          "version": null,
+          "package": "onimi-pages-creator",
+          "registry": "https://registry.npmjs.org"
+        },
+        "clawhub": {
+          "available": false,
+          "version": null,
+          "slug": "@mariohazy/onimi-pages-creator",
+          "site": "https://clawhub.ai/mariohazy/onimi-pages-creator"
+        }
+      }
+    },
+    "publish": {
+      "name": "onimi-pages-publish",
+      "version": "0.2.0",
+      "minimumNode": "20.0.0",
+      "releaseNotes": {
+        "en": "Adds a verified, local-change-safe update workflow, a stable latest download channel, and honest visibility fallback for older MCP services.",
+        "zh-CN": "新增经过校验、保护本地修改的更新流程、稳定的 latest 下载渠道，以及对旧版 MCP 服务如实处理可见性的兼容流程。"
+      },
+      "archive": {
+        "url": "https://downloads.onimi.ai/skills/onimi-pages-publish/0.2.0/onimi-pages-publish-0.2.0.zip",
+        "sha256": "77c6944d82445372a0099090f857fc724e8045a1762d39ec0feb9985722dc87c",
+        "size": 17418
+      },
+      "channels": {
+        "direct": {
+          "available": true,
+          "version": "0.2.0",
+          "url": "https://downloads.onimi.ai/skills/onimi-pages-publish/0.2.0/onimi-pages-publish-0.2.0.zip"
+        },
+        "github": {
+          "available": true,
+          "version": "0.1.1",
+          "url": "https://github.com/zlch-oceanai/onimi-pages-publish"
+        },
+        "npm": {
+          "available": false,
+          "version": null,
+          "package": "onimi-pages-publish",
+          "registry": "https://registry.npmjs.org"
+        },
+        "clawhub": {
+          "available": true,
+          "version": "0.1.1",
+          "slug": "@mariohazy/onimi-pages-publish",
+          "site": "https://clawhub.ai/mariohazy/onimi-pages-publish"
+        }
+      }
+    }
+  }
+}

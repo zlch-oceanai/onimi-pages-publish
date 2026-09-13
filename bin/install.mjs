@@ -5,20 +5,29 @@ import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const name = "onimi-pages-publish";
+const packageMetadata = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
+const name = packageMetadata.name;
+if (!["onimi-pages-publish", "onimi-pages-creator"].includes(name)) {
+  throw new Error("Unsupported Onimi Pages package identity.");
+}
+const isPublish = name === "onimi-pages-publish";
 const agents = { codex: ".agents/skills", "claude-code": ".claude/skills", cursor: ".cursor/skills" };
+const boundary = isPublish
+  ? `No network access, MCP configuration changes, credentials, or authorization
+actions are performed by this installer. After installation, ask your agent to
+follow the connection guide and start OAuth.`
+  : `No network access, credentials, authorization, or publishing actions are
+performed by this installer. Follow the bundled guide after installation.`;
 const help = `Onimi Pages Skill installer
 
 Usage:
-  onimi-pages-publish install --agent codex|claude-code|cursor [--lang en|zh-CN]
-  onimi-pages-publish install --dir /absolute/path/to/skills [--lang en|zh-CN]
-  onimi-pages-publish guide [--lang en|zh-CN]
+  ${name} install --agent codex|claude-code|cursor [--lang en|zh-CN]
+  ${name} install --dir /absolute/path/to/skills [--lang en|zh-CN]
+  ${name} guide [--lang en|zh-CN]
 
 --dir is a skills PARENT directory; the installer adds /${name}.
 Choose exactly one target. Existing installations are preserved; remove or move
-the old skill yourself before reinstalling. No network access, MCP configuration
-changes, credentials, or authorization actions are performed by this installer.
-After installation, ask your agent to follow the connection guide and start OAuth.
+the old skill yourself before reinstalling. ${boundary}
 `;
 
 async function main() {
@@ -81,9 +90,15 @@ async function main() {
   }
   await rm(staging, { recursive: true, force: true });
   console.log(lang === "zh-CN" ? `已安装：${target}` : `Installed: ${target}`);
-  console.log(lang === "zh-CN"
-    ? `请让当前 Agent 阅读 ${join(target, "references", guide)}，配置连接并发起浏览器授权。安装本身不会完成授权。`
-    : `Ask your current agent to read ${join(target, "references", guide)}, configure the connection and start browser OAuth. Installation alone does not authorize access.`);
+  if (isPublish) {
+    console.log(lang === "zh-CN"
+      ? `请让当前 Agent 阅读 ${join(target, "references", guide)}，配置连接并发起浏览器授权。安装本身不会完成授权。`
+      : `Ask your current agent to read ${join(target, "references", guide)}, configure the connection and start browser OAuth. Installation alone does not authorize access.`);
+  } else {
+    console.log(lang === "zh-CN"
+      ? `请让当前 Agent 阅读 ${join(target, "references", guide)}。安装本身不会发布页面或授权账号。`
+      : `Ask your current agent to read ${join(target, "references", guide)}. Installation does not publish a page or authorize an account.`);
+  }
 }
 
 main().catch((error) => {

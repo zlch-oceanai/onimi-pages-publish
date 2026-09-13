@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "name": "onimi-pages-publish",
+  "version": "0.2.0",
+  "manifestUrl": "https://downloads.onimi.ai/skills/manifest.json",
+  "managedFiles": {
+    "LICENSE": "2e2e3ef1ff317b37ce531eb1a2645cda3fe454d12592e498607c3edab385ddee",
+    "SKILL.md": "faed6f033e1bc26c2ed3e0bf9d00e257192caeff6dbe3946859a09e405c92335",
+    "agents/openai.yaml": "46acb95cfec2d11f04a27164a7c00a1cf50b599172f2632771159be91598a1ee",
+    "references/installation.md": "bcd3093872f341b736644566705ddc20b28cafae682dd8136846c5c39cc3b40d",
+    "references/installation.zh-CN.md": "28967f55dea46c40550a8dd6ae4259d6ac02263a04302271ae0c1a47155a1951",
+    "references/remote-mcp.json": "a7dc817aa929c54261c2034cb6d308e1c926cdf89f802e3c00b13a927a3f560f",
+    "scripts/manage.mjs": "f2f8da238a0e9140a186f77d1dcf42a9aa187828fd2aa017fc2f0cd96562f479"
+  }
+}

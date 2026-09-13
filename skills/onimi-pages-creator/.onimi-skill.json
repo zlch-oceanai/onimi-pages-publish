@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "name": "onimi-pages-creator",
+  "version": "0.1.0",
+  "manifestUrl": "https://downloads.onimi.ai/skills/manifest.json",
+  "managedFiles": {
+    "LICENSE": "2e2e3ef1ff317b37ce531eb1a2645cda3fe454d12592e498607c3edab385ddee",
+    "SKILL.md": "de008f2c4e63dd8647e795b54e2dfe1cbf13843132c262fd3a249232dba17ad0",
+    "agents/openai.yaml": "61112b0802c38b82ab0fdd130043744b14bf6f79850aba92120d51f462262511",
+    "references/installation.md": "2000510655d3a768a47329a0b096b95a56cf9e59a7a8692e6669e59f3f6b6e8f",
+    "references/installation.zh-CN.md": "2c912b59369fc22e7edfebfbb565214d65948b2134184763db81669e543c96e6",
+    "references/page-quality.md": "5e143c4d3e601d3255f0556e4a918122e4fd0edd7014c95de0a5ddcecd7a6cf6",
+    "references/scenario-playbook.md": "203bdd3e06a837d10a970952ed6b264f441f9c49ee01a04839533b317f93d9e4",
+    "scripts/manage.mjs": "f2f8da238a0e9140a186f77d1dcf42a9aa187828fd2aa017fc2f0cd96562f479",
+    "scripts/validate-html.mjs": "f870f685fdb5e5a5e1af4788043f314a9ad0a8d5a4da34e7c6c06c0eb5bb52a2"
+  }
+}

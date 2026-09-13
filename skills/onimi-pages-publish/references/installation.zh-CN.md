@@ -9,29 +9,30 @@ npm 包内置完整 Skill 和无第三方依赖的本地安装器，不从 GitHu
 需要 Node.js 20 或以上版本，以及 npm。
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 install --agent codex --lang zh-CN
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --agent codex --lang zh-CN
 ```
 
 将 `codex` 替换为 `claude-code` 或 `cursor`，只安装到当前 Agent。
 其他客户端请先查明个人技能目录，再使用 `install --dir /技能父目录的绝对路径 --lang zh-CN`。
 安装器会在父目录内创建 `onimi-pages-publish` 文件夹；已有目录会保留并停止安装。
-更新前先将旧目录移走备份。安装后按需重新加载 Agent。
+安装后按需重新加载 Agent。使用市场渠道前，请查看
+https://downloads.onimi.ai/skills/manifest.json 中的已验证渠道状态。npm 渠道标记为可用时
+再运行上面的 `@latest` 命令；尚不可用时，请选择清单中另一个已标记为可用的渠道。
 
 查看完整参数：
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest --help
 ```
 
 ## 直接下载
 
-通过 Cloudflare 下载版本固定的 ZIP 和校验值：
+从稳定清单读取 `skills.publish.archive.url`、`sha256` 和 `size`：
 
-- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip
-- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS
+- https://downloads.onimi.ai/skills/manifest.json
 
-macOS 使用 `shasum -a 256`，Linux 使用 `sha256sum`，PowerShell 使用
-`Get-FileHash -Algorithm SHA256`，将结果与 SHA256SUMS 比较后再解压。
+下载该准确的不可变版本归档。先校验字节数，再使用 `shasum -a 256`（macOS）、
+`sha256sum`（Linux）或 PowerShell `Get-FileHash -Algorithm SHA256` 校验 SHA-256，然后解压。
 将完整的 `onimi-pages-publish/` 文件夹放进当前 Agent 的个人技能父目录，不要只复制
 SKILL.md，也不要覆盖已有的个人修改。
 
@@ -46,9 +47,10 @@ SKILL.md，也不要覆盖已有的个人修改。
 条目：https://clawhub.ai/mariohazy/onimi-pages-publish
 
 核对发布者为 `mariohazy`，技能为 `@mariohazy/onimi-pages-publish`：
+固定版本的 ClawHub CLI 需要 Node.js 22 或更高版本；Node.js 20 请改用其他已验证渠道。
 
 ```sh
-npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish --version 0.1.1
+npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish
 ```
 
 默认安装到 ClawHub 配置的工作区技能目录。通过 `--workdir` 和 `--dir` 指定当前 Agent
@@ -66,9 +68,24 @@ npx --registry=https://registry.npmjs.org skills@1.5.26 add zlch-oceanai/onimi-p
 只选择当前 Agent 和个人安装范围。不能运行命令的客户端，使用其技能导入入口，
 或复制仓库中完整的 `skills/onimi-pages-publish` 文件夹。
 
+只有 `SKILL.md` 同级存在 `.onimi-skill.json` 的直接下载安装才使用内置管理器；
+没有该收据时，请使用对应渠道的原生更新流程。从其 `SKILL.md` 路径定位已安装 Skill 目录，不要切换用户工作区，
+并使用绝对路径运行管理器。可运行
+`node /absolute/path/to/onimi-pages-publish/scripts/manage.mjs status` 离线检查本地状态，
+运行 `node /absolute/path/to/onimi-pages-publish/scripts/manage.mjs check` 做每天最多一次、失败不阻塞的更新检查。
+用户明确同意所显示的版本后，才运行
+`node /absolute/path/to/onimi-pages-publish/scripts/manage.mjs update --confirm onimi-pages-publish@<版本>`。
+管理器会保护所有修改与新增文件、校验不可变归档、保留备份，并在切换失败时回滚。
+npm、ClawHub、GitHub 和 Agent 宿主的更新命令由各渠道分别管理。
+
 ## 配置连接与授权
 
 远程 MCP 地址：`https://onimi.ai/mcp`，使用 Streamable HTTP 和浏览器 OAuth / PKCE。
+
+实际工具列表取决于线上服务版本。修改已发布项目的可见性前，Agent 会先检查当前连接
+实际发现的工具。如果没有 `onimi_set_visibility`，发布版本仍然有效，但可见性不会改变；
+请前往 https://onimi.ai/dashboard 的项目设置中修改。Agent 不得把私有或不公开列出的
+发布结果描述为已公开展示。
 不需要静态 Authorization header、API Key 或开发者 Token。
 Skill 安装与 MCP 配置是独立步骤。支持依赖声明的宿主可读取 `agents/openai.yaml`；
 其他客户端需要使用自身的 MCP 设置入口。

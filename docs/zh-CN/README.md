@@ -6,19 +6,20 @@
 
 ## 安装
 
-**npm 正在完成上架，目前请使用下方的 Cloudflare 直接下载或 ClawHub 安装。**
+选择市场渠道前，请先查看[已验证的渠道状态](https://downloads.onimi.ai/skills/manifest.json)。
+npm 渠道标记为可用时再安装其 `latest` 版本；尚不可用时，请选择另一个已标记为可用的渠道。
 
 把下面的提示词复制到当前 Agent：
 
-> 请从 https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip 下载 Onimi Pages Skill，用同目录的 SHA256SUMS 校验后，将完整文件夹安装到当前 Agent 的个人技能目录，保留已有安装。阅读安装包内的中文连接指南，添加 `https://onimi.ai/mcp` 并发起浏览器 OAuth，让我完成登录和权限确认。授权后调用 `onimi_list_projects` 验证连接。本次只安装和连接，不创建项目或发布页面。
+> 请从 https://downloads.onimi.ai/skills/manifest.json 读取 `skills.publish.archive.url`、`sha256` 和 `size`，下载该准确的 Onimi Pages Publish 归档，并校验 SHA-256 和字节数。将完整文件夹安装到当前 Agent 的个人技能目录，保留已有安装。阅读安装包内的中文连接指南，添加 `https://onimi.ai/mcp` 并发起浏览器 OAuth，让我完成登录和权限确认。授权后调用 `onimi_list_projects` 验证连接。本次只安装和连接，不创建项目或发布页面。
 
 各来源均提供完整 Skill 文件。安装与浏览器授权是两个步骤，具体命令见[安装说明](INSTALL.md)。
 
 也可以选择其他安装来源：
 
-- [npm](https://www.npmjs.com/package/onimi-pages-publish)：`npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help`
+- [npm](https://www.npmjs.com/package/onimi-pages-publish)：`npx --registry=https://registry.npmjs.org onimi-pages-publish@latest --help`
 
-- [Cloudflare 直接下载](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip) · [SHA-256 校验值](https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS)
+- [稳定直接下载地址、版本、字节数与 SHA-256 清单](https://downloads.onimi.ai/skills/manifest.json)
 - [ClawHub：@mariohazy/onimi-pages-publish](https://clawhub.ai/mariohazy/onimi-pages-publish)
 - GitHub：`npx --registry=https://registry.npmjs.org skills@1.5.26 add zlch-oceanai/onimi-pages-publish --skill onimi-pages-publish --global`
 
@@ -51,10 +52,12 @@ Agent 读取 HTML、创建你要求的新项目并发布页面，返回稳定链
 仓库仅包含公开分发文件，不包含私有应用代码或凭证。
 Skill 和安装器使用 MIT-0 许可证，与 ClawHub 发布条款一致；托管服务适用独立条款。
 
-## 0.1.1
+## 0.2.0
 
-- npm 内置安装器、Cloudflare 直接下载、ClawHub 原生分发。
+- 稳定清单、不可变归档，以及保护本地修改的更新管理器。
 - 中英文安装说明分开，默认英文。
 - 提供中英文演示视频和封面。
 
-更新前请阅读变更。安装器会保留已有目录，先把旧安装移走备份，再安装新版本。
+更新前请阅读变更。直接下载安装可使用
+`node skills/onimi-pages-publish/scripts/manage.mjs status|check|update`；更新需要显式确认并保留校验过的备份。
+npm、GitHub 与 ClawHub 分别使用各自的更新机制。

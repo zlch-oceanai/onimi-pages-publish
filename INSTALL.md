@@ -9,25 +9,30 @@ The npm package bundles the complete skill and a dependency-free local installer
 It does not fetch skill files from GitHub. Requires Node.js 20 or later and npm.
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 install --agent codex
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --agent codex
 ```
 
 Replace `codex` with `claude-code` or `cursor`. For another client, inspect its documented
 personal skills directory and use `install --dir /absolute/path/to/skills` instead.
 The installer creates `onimi-pages-publish` inside that parent directory. It preserves
-existing installations: move the old folder aside before installing an update.
-Run `npx --registry=https://registry.npmjs.org onimi-pages-publish@0.1.1 --help` for options.
+existing installations. Run
+`npx --registry=https://registry.npmjs.org onimi-pages-publish@latest --help` for options.
 Only install for the current agent. Restart or reload that agent if needed.
+
+Check the verified channel states in
+https://downloads.onimi.ai/skills/manifest.json before using a registry source. Run the
+`@latest` npm command only when the npm channel is marked available; otherwise use
+another channel marked available in that manifest.
 
 ## Direct download
 
-Download the archive and checksum from Cloudflare:
+Read `skills.publish.archive.url`, `sha256`, and `size` from the stable manifest:
 
-- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/onimi-pages-publish-0.1.1.zip
-- https://downloads.onimi.ai/skills/onimi-pages-publish/0.1.1/SHA256SUMS
+- https://downloads.onimi.ai/skills/manifest.json
 
-Verify with `shasum -a 256` (macOS), `sha256sum` (Linux), or PowerShell
-`Get-FileHash -Algorithm SHA256`, and compare against SHA256SUMS before extracting.
+Download that exact immutable, versioned archive. Verify its byte size and SHA-256 with
+`shasum -a 256` (macOS), `sha256sum` (Linux), or PowerShell
+`Get-FileHash -Algorithm SHA256` before extracting.
 The ZIP contains one complete `onimi-pages-publish/` directory; copy it intact into
 only your current agent's personal skills directory. Do not overwrite local changes.
 
@@ -41,9 +46,10 @@ only your current agent's personal skills directory. Do not overwrite local chan
 
 Listing: https://clawhub.ai/mariohazy/onimi-pages-publish
 Publisher: `mariohazy`; skill: `@mariohazy/onimi-pages-publish`.
+The pinned ClawHub CLI requires Node.js 22 or later; use another verified channel on Node.js 20.
 
 ```sh
-npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish --version 0.1.1
+npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onimi-pages-publish
 ```
 
 ClawHub installs into its configured workspace skill directory by default. Use its
@@ -64,9 +70,28 @@ import UI or copy the complete `skills/onimi-pages-publish` folder from the repo
 Other clients require their own custom-skill and remote MCP support; a brand name
 alone does not establish compatibility in every desktop, web or mobile version.
 
+The bundled manager applies only when a direct-download installation has
+`.onimi-skill.json` beside `SKILL.md`. If the receipt is absent, use that channel's native
+update flow. For a receipt-backed installation, resolve the installed Skill directory from its
+`SKILL.md` path and invoke the manager by absolute path without changing the user's
+workspace directory. Run
+`node /absolute/path/to/onimi-pages-publish/scripts/manage.mjs status` locally,
+`node /absolute/path/to/onimi-pages-publish/scripts/manage.mjs check` for the daily
+non-blocking update check, and only after approving the displayed version run
+`node /absolute/path/to/onimi-pages-publish/scripts/manage.mjs update --confirm onimi-pages-publish@<version>`.
+The manager protects all edits and additional files, verifies the immutable archive,
+keeps a backup, and atomically rolls back a failed switch. npm, ClawHub, GitHub, and
+agent-host update commands remain specific to those channels.
+
 ## Configure the connection
 
 Remote MCP: `https://onimi.ai/mcp` (Streamable HTTP, browser OAuth with PKCE).
+
+The exact tool set depends on the deployed service version. Before changing a published
+project's visibility, the agent checks the tools it actually discovered. If
+`onimi_set_visibility` is absent, the release remains valid but its visibility remains
+unchanged; use the project's settings in https://onimi.ai/dashboard. The agent must not
+report a private or unlisted release as publicly listed.
 No static Authorization header or developer token is needed. Skill installation
 alone does not necessarily register the MCP server. `agents/openai.yaml` declares
 a dependency for hosts that support it; other hosts need their native MCP setup.

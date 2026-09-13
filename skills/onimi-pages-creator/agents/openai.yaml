@@ -1,0 +1,4 @@
+interface:
+  display_name: "Onimi Pages Creator"
+  short_description: "Create polished standalone HTML pages for Onimi Pages."
+  default_prompt: "Use $onimi-pages-creator to create and preview a polished standalone HTML page for this request."
