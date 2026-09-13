@@ -22,19 +22,19 @@
           "url": "https://downloads.onimi.ai/skills/onimi-pages-creator/0.1.0/onimi-pages-creator-0.1.0.zip"
         },
         "github": {
-          "available": false,
-          "version": null,
+          "available": true,
+          "version": "0.1.0",
           "url": "https://github.com/zlch-oceanai/onimi-pages-creator"
         },
         "npm": {
-          "available": false,
-          "version": null,
+          "available": true,
+          "version": "0.1.0",
           "package": "onimi-pages-creator",
           "registry": "https://registry.npmjs.org"
         },
         "clawhub": {
-          "available": false,
-          "version": null,
+          "available": true,
+          "version": "0.1.0",
           "slug": "@mariohazy/onimi-pages-creator",
           "site": "https://clawhub.ai/mariohazy/onimi-pages-creator"
         }
@@ -61,18 +61,18 @@
         },
         "github": {
           "available": true,
-          "version": "0.1.1",
+          "version": "0.2.0",
           "url": "https://github.com/zlch-oceanai/onimi-pages-publish"
         },
         "npm": {
-          "available": false,
-          "version": null,
+          "available": true,
+          "version": "0.2.0",
           "package": "onimi-pages-publish",
           "registry": "https://registry.npmjs.org"
         },
         "clawhub": {
           "available": true,
-          "version": "0.1.1",
+          "version": "0.2.0",
           "slug": "@mariohazy/onimi-pages-publish",
           "site": "https://clawhub.ai/mariohazy/onimi-pages-publish"
         }
