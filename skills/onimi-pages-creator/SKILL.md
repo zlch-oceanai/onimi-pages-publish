@@ -1,14 +1,20 @@
 ---
 name: onimi-pages-creator
-description: Create, refine, validate, and preview a polished standalone HTML page when the user wants a website, interactive artifact, report, poster, dashboard, or demo that can be shared through Onimi Pages.
+description: Create polished standalone HTML / 创建高质量自包含 HTML。Use for websites, interactive artifacts, reports, posters, dashboards, or demos.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Onimi Pages Creator
 
 Create the page in the user's own Agent workspace. Onimi Pages supplies publishing and stable links;
 it does not supply a hosted model or generate the page on the user's behalf.
+
+Follow the user's conversation language for progress, questions, and the final response: answer in
+Chinese for a Chinese conversation and in English for an English conversation unless the user asks
+otherwise. Follow the user's requested language, locale, tone, facts, and audience for the created page.
+When the artifact language is not specified, infer it from the request and conversation; do not change
+the response language merely because the artifact itself is bilingual or uses a different language.
 
 ## Shape the artifact
 

@@ -4,22 +4,22 @@
   "skills": {
     "creator": {
       "name": "onimi-pages-creator",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "minimumNode": "20.0.0",
       "releaseNotes": {
-        "en": "Initial release for creating and validating self-contained HTML in the user's own agent workspace.",
-        "zh-CN": "首个版本：在用户自己的 Agent 工作区中创建并校验自包含 HTML。"
+        "en": "Clarifies bilingual conversation output and user-directed artifact language while preserving the local creation workflow.",
+        "zh-CN": "明确双语会话输出和用户指定的页面语言，同时保留本地创作工作流。"
       },
       "archive": {
-        "url": "https://downloads.onimi.ai/skills/onimi-pages-creator/0.1.0/onimi-pages-creator-0.1.0.zip",
-        "sha256": "d921d81d591fbce004218f2bd2b2e92dab1a3a672e9100f1c1836dec97ae4af3",
-        "size": 20764
+        "url": "https://downloads.onimi.ai/skills/onimi-pages-creator/0.1.1/onimi-pages-creator-0.1.1.zip",
+        "sha256": "2ac1e6d45720cf9c3a68bbec4d1a21785a9ab3885bd781e529138120fa433b82",
+        "size": 20951
       },
       "channels": {
         "direct": {
           "available": true,
-          "version": "0.1.0",
-          "url": "https://downloads.onimi.ai/skills/onimi-pages-creator/0.1.0/onimi-pages-creator-0.1.0.zip"
+          "version": "0.1.1",
+          "url": "https://downloads.onimi.ai/skills/onimi-pages-creator/0.1.1/onimi-pages-creator-0.1.1.zip"
         },
         "github": {
           "available": true,
@@ -42,22 +42,22 @@
     },
     "publish": {
       "name": "onimi-pages-publish",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "minimumNode": "20.0.0",
       "releaseNotes": {
-        "en": "Adds a verified, local-change-safe update workflow, a stable latest download channel, and honest visibility fallback for older MCP services.",
-        "zh-CN": "新增经过校验、保护本地修改的更新流程、稳定的 latest 下载渠道，以及对旧版 MCP 服务如实处理可见性的兼容流程。"
+        "en": "Adds bilingual agent guidance, a reviewable WorkBuddy MCP + Skill connector package, and precise upload error reporting.",
+        "zh-CN": "新增双语 Agent 指引、可审查的 WorkBuddy MCP + Skill 连接器包，以及准确的上传错误报告。"
       },
       "archive": {
-        "url": "https://downloads.onimi.ai/skills/onimi-pages-publish/0.2.0/onimi-pages-publish-0.2.0.zip",
-        "sha256": "77c6944d82445372a0099090f857fc724e8045a1762d39ec0feb9985722dc87c",
-        "size": 17418
+        "url": "https://downloads.onimi.ai/skills/onimi-pages-publish/0.2.1/onimi-pages-publish-0.2.1.zip",
+        "sha256": "2ba6fcf2633eecfac7dc727e8073bcd3b6169d5bc11712b63c30ca709f5ca130",
+        "size": 17758
       },
       "channels": {
         "direct": {
           "available": true,
-          "version": "0.2.0",
-          "url": "https://downloads.onimi.ai/skills/onimi-pages-publish/0.2.0/onimi-pages-publish-0.2.0.zip"
+          "version": "0.2.1",
+          "url": "https://downloads.onimi.ai/skills/onimi-pages-publish/0.2.1/onimi-pages-publish-0.2.1.zip"
         },
         "github": {
           "available": true,

@@ -1,0 +1,22 @@
+{
+  "name": "Onimi Pages",
+  "name_zh": "Onimi Pages",
+  "name_en": "Onimi Pages",
+  "description": "Beta connector for publishing standalone HTML through browser-authorized Remote MCP.",
+  "description_zh": "测试版连接器：通过浏览器 OAuth 授权的远程 MCP 发布自包含 HTML。",
+  "description_en": "Beta connector for publishing standalone HTML through browser-authorized Remote MCP.",
+  "source": "onimi-pages",
+  "type": "mcp",
+  "version": "0.2.1",
+  "minWorkbuddyVersion": "4.24.0",
+  "examples_zh": [
+    "列出我的 Onimi Pages 项目",
+    "把已生成的 report.html 发布到我选择的项目，并保持现有可见性",
+    "将这个项目改为仅链接可见，并返回稳定地址和版本地址"
+  ],
+  "examples_en": [
+    "List my Onimi Pages projects",
+    "Publish the generated report.html to the project I select and preserve its visibility",
+    "Make this project unlisted and return its stable and version URLs"
+  ]
+}
