@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "onimi-pages": {
+      "type": "streamableHttp",
+      "url": "https://onimi.ai/mcp",
+      "timeout": 30000
+    }
+  }
+}

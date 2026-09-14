@@ -57,7 +57,7 @@ The repository contains public distribution files only. It excludes private appl
 code and credentials. The skill and installer use MIT-0, compatible with ClawHub's
 publishing terms. Hosted service terms are separate.
 
-## 0.2.0
+## 0.2.1
 
 - Stable manifest, immutable archives and a local-change-safe update manager.
 - Separate English and Chinese installation guides; English remains the default.

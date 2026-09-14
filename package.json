@@ -1,6 +1,6 @@
 {
   "name": "onimi-pages-publish",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Publish HTML with Onimi Pages using browser-authorized Remote MCP.",
   "author": "oceanai <oceanailab@gmail.com>",
   "type": "module",

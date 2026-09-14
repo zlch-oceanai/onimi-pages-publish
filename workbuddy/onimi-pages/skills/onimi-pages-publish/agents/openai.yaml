@@ -1,0 +1,11 @@
+interface:
+  display_name: "Onimi Pages Publish"
+  short_description: "Publish one HTML page through browser-authorized Remote MCP."
+  default_prompt: "Publish the selected HTML artifact to Onimi Pages, preserve visibility unless I explicitly change it, and return the stable URL, version URL, and actual visibility."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "onimi-pages"
+      description: "Onimi Pages publishing tools with browser OAuth authorization."
+      transport: "streamable_http"
+      url: "https://onimi.ai/mcp"

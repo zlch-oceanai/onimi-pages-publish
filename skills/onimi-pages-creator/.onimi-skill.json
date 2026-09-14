@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "name": "onimi-pages-creator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "manifestUrl": "https://downloads.onimi.ai/skills/manifest.json",
   "managedFiles": {
     "LICENSE": "2e2e3ef1ff317b37ce531eb1a2645cda3fe454d12592e498607c3edab385ddee",
-    "SKILL.md": "de008f2c4e63dd8647e795b54e2dfe1cbf13843132c262fd3a249232dba17ad0",
+    "SKILL.md": "a7e4d73b551c4e9aeabfdd71614cf9cc3301187a4192236bfbb7f1553942ec1a",
     "agents/openai.yaml": "61112b0802c38b82ab0fdd130043744b14bf6f79850aba92120d51f462262511",
     "references/installation.md": "2000510655d3a768a47329a0b096b95a56cf9e59a7a8692e6669e59f3f6b6e8f",
     "references/installation.zh-CN.md": "2c912b59369fc22e7edfebfbb565214d65948b2134184763db81669e543c96e6",
