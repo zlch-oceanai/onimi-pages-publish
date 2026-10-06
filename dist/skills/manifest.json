@@ -23,7 +23,7 @@
         },
         "github": {
           "available": true,
-          "version": "0.1.1",
+          "version": "0.3.1",
           "url": "https://github.com/zlch-oceanai/onimi-pages-creator"
         },
         "npm": {
@@ -34,7 +34,7 @@
         },
         "clawhub": {
           "available": true,
-          "version": "0.1.1",
+          "version": "0.3.1",
           "slug": "@mariohazy/onimi-pages-creator",
           "site": "https://clawhub.ai/mariohazy/onimi-pages-creator"
         }
@@ -61,7 +61,7 @@
         },
         "github": {
           "available": true,
-          "version": "0.2.1",
+          "version": "0.3.1",
           "url": "https://github.com/zlch-oceanai/onimi-pages-publish"
         },
         "npm": {
@@ -72,7 +72,7 @@
         },
         "clawhub": {
           "available": true,
-          "version": "0.2.1",
+          "version": "0.3.1",
           "slug": "@mariohazy/onimi-pages-publish",
           "site": "https://clawhub.ai/mariohazy/onimi-pages-publish"
         }
