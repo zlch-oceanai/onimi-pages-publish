@@ -28,7 +28,7 @@
         },
         "npm": {
           "available": true,
-          "version": "0.1.1",
+          "version": "0.3.1",
           "package": "onimi-pages-creator",
           "registry": "https://registry.npmjs.org"
         },
@@ -66,7 +66,7 @@
         },
         "npm": {
           "available": true,
-          "version": "0.2.1",
+          "version": "0.3.1",
           "package": "onimi-pages-publish",
           "registry": "https://registry.npmjs.org"
         },
