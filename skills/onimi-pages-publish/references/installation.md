@@ -1,7 +1,10 @@
 # Install Onimi Pages
 
-Choose one installation source, then connect your current agent using the guide below.
+Choose one installation source. The default suite path explicitly prepares Creator and Publish, then
+connects the current agent only when a cloud task needs it.
 Installation does not authorize access or establish production service readiness.
+One installation task checks and adds both modules. Creation and prepublish checks use the current
+agent's model; no separate local model installation is needed.
 
 ## npm
 
@@ -9,32 +12,40 @@ The npm package bundles the complete skill and a dependency-free local installer
 It does not fetch skill files from GitHub. Requires Node.js 20 or later and npm.
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --agent codex
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --suite --agent codex
 ```
 
 Replace `codex` with `claude-code` or `cursor`. For another client, inspect its documented
 personal skills directory and use `install --dir /absolute/path/to/skills` instead.
-The installer creates `onimi-pages-publish` inside that parent directory. It preserves
-existing installations. Run
+The suite installer creates missing `onimi-pages-creator` and `onimi-pages-publish` folders inside that
+parent directory. It preserves every existing folder and local change. If an older Publish module was
+already present, adding Creator does not upgrade Publish: check both versions before claiming the
+current suite is ready. Update the old module through its original channel while preserving personal
+changes, and explain when a safe update is unavailable. Omit `--suite` only for the
+advanced legacy task of publishing finished HTML without Creator. Run
 `npx --registry=https://registry.npmjs.org onimi-pages-publish@latest --help` for options.
 Only install for the current agent. Restart or reload that agent if needed.
 
 Check the verified channel states in
 https://downloads.onimi.ai/skills/manifest.json before using a registry source. Run the
-`@latest` npm command only when the npm channel is marked available; otherwise use
-another channel marked available in that manifest.
+`@latest` suite command only when `skills.publish.channels.npm.available` is true and its channel
+version equals `skills.publish.version`; an older available Publish package may not contain the suite
+installer. Otherwise use a current channel from that manifest.
 
 ## Direct download
 
-Read `skills.publish.archive.url`, `sha256`, and `size` from the stable manifest:
+For the suite, read the complete `skills.creator.archive.url`, `skills.creator.archive.sha256`, and
+`skills.creator.archive.size` fields plus the matching `skills.publish.archive.url`,
+`skills.publish.archive.sha256`, and `skills.publish.archive.size` fields from the stable manifest:
 
 - https://downloads.onimi.ai/skills/manifest.json
 
-Download that exact immutable, versioned archive. Verify its byte size and SHA-256 with
+Download both exact immutable, versioned archives. Verify each byte size and SHA-256 with
 `shasum -a 256` (macOS), `sha256sum` (Linux), or PowerShell
 `Get-FileHash -Algorithm SHA256` before extracting.
-The ZIP contains one complete `onimi-pages-publish/` directory; copy it intact into
-only your current agent's personal skills directory. Do not overwrite local changes.
+Each ZIP contains one complete Skill directory. Add only a missing `onimi-pages-creator/` or
+`onimi-pages-publish/` directory to the current agent's personal skills directory. Do not overwrite
+either existing directory or local changes. The advanced Publish-only path needs only the Publish entry.
 
 | Client | Personal skills parent directory |
 | --- | --- |
@@ -102,7 +113,7 @@ Check `codex --version` and `codex mcp add --help` before using these options:
 
 ```sh
 codex mcp add onimi-pages --url https://onimi.ai/mcp --oauth-client-registration dcr --oauth-resource https://onimi.ai/mcp
-codex mcp login onimi-pages --oauth-client-registration dcr --scopes project:read,project:write,release:read,release:publish
+codex mcp login onimi-pages --oauth-client-registration dcr --scopes project:read,project:write,draft:read,draft:write,template:read,release:read,release:publish,collaboration:manage
 ```
 
 The add operation may start authorization itself. Skip login if already connected.
@@ -145,11 +156,13 @@ The user signs in to Onimi Pages if needed, reviews requested scopes, and approv
 the connection. The agent must not click consent for the user or request tokens in
 chat. The client owns credential storage and refresh.
 
-After approval, call `onimi_list_projects` to check the connection. An empty project
-list is a valid result. Do not create a project or publish a page as an installation
-test. Tell the user to ask explicitly for a new project when publishing their first
-HTML file. Revoke access in `https://onimi.ai/dashboard/connections` when no longer
-needed. This does not take already published pages offline.
+Before authorization, call `onimi_get_connection`. Reuse it only for the same account when its effective
+scopes cover the task. After approval, call it again; it reports connection identity and scopes but
+deliberately leaves module installation to a client-local check. If an older deployed service does not
+expose this tool, use `onimi_list_projects` as the read-only compatibility check; an empty list is valid.
+Do not create a project, read a private draft, acquire a template, or publish as an installation test.
+Revoke access in `https://onimi.ai/dashboard/connections` when no longer needed. This does not take
+already published pages offline.
 
 If discovery returns 404, a protection page or a login HTML document, installation
 cannot repair the hosted service. Explain the unavailable connection; do not report

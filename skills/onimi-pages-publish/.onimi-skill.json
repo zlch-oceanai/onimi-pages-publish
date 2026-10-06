@@ -1,15 +1,18 @@
 {
   "schemaVersion": 1,
   "name": "onimi-pages-publish",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "manifestUrl": "https://downloads.onimi.ai/skills/manifest.json",
   "managedFiles": {
     "LICENSE": "2e2e3ef1ff317b37ce531eb1a2645cda3fe454d12592e498607c3edab385ddee",
-    "SKILL.md": "c857b676cd768022eab276c1a468b8f9d4be6f603dc00383d996c3881361a9b4",
-    "agents/openai.yaml": "46acb95cfec2d11f04a27164a7c00a1cf50b599172f2632771159be91598a1ee",
-    "references/installation.md": "bcd3093872f341b736644566705ddc20b28cafae682dd8136846c5c39cc3b40d",
-    "references/installation.zh-CN.md": "28967f55dea46c40550a8dd6ae4259d6ac02263a04302271ae0c1a47155a1951",
+    "SKILL.md": "ac6349e2f635f44e0677d2b7ef110614d9e083279604a0ba92d2e678fd25654c",
+    "agents/openai.yaml": "4065de80342d41c83979e51af13bb68a9bee2bbab0dcc62739a7e0e81b872422",
+    "references/installation.md": "b553d830966ce2160d31f7e5338c4c6642a86c3e2d7ac58e05dab7f2c8439313",
+    "references/installation.zh-CN.md": "06d95ccca8c4b31c5e31c007f47a968dfbf7f3fb0cc2ff5e4c082639f0698360",
     "references/remote-mcp.json": "a7dc817aa929c54261c2034cb6d308e1c926cdf89f802e3c00b13a927a3f560f",
-    "scripts/manage.mjs": "f2f8da238a0e9140a186f77d1dcf42a9aa187828fd2aa017fc2f0cd96562f479"
+    "references/stage-observer.md": "6ebcde3e5bfa3870c949caa3091a78ec393046c69e3b6764476132743bb7b56f",
+    "scripts/h08-stage-observer.mjs": "7a559dbe8110ae13eaa4393ab3e8b39bedcbcdccf5609d602aec4bb94c26f05d",
+    "scripts/manage.mjs": "472b34ecb5d8118bfaabd53b16f15a9ddb3031b9bf25e484a8614f00de510186",
+    "scripts/task-state.mjs": "2fee8a51beaad78aa310fad25978be56cd0349cc816d012396d34edc0511c67d"
   }
 }

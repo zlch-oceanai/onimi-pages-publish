@@ -12,7 +12,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { homedir } from "node:os";
-import { basename, dirname, join, resolve, sep } from "node:path";
+import { basename, dirname, isAbsolute, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { inflateRawSync } from "node:zlib";
 
@@ -25,18 +25,39 @@ const MAX_FILES = 256;
 const MAX_UNPACKED_BYTES = 40 * 1024 * 1024;
 const help = `Onimi Skill manager
 
-Usage (run from the installed skill):
+Usage (run from the installed skill, or use --dir with a verified new manager):
   node scripts/manage.mjs status
+  node scripts/manage.mjs suite-status
   node scripts/manage.mjs check
   node scripts/manage.mjs update --confirm <skill-name>@<version>
+  node scripts/manage.mjs update --dir <absolute-installed-skill-directory> --confirm <skill-name>@<version>
 
 status never uses the network. check contacts the stable manifest at most once
 per 24 hours and treats an offline check as non-fatal. update always requires the
 exact current manifest version in --confirm. It refuses any local edits or extra
 files, verifies the archive SHA-256, keeps a backup, and switches atomically.
+Use --dir to refresh an existing installation from a newly downloaded manager
+when the installed manager cannot handle a changed package at the same version.
+suite-status is offline and reports the real local state of both Onimi modules;
+it never infers client compatibility or connection state.
 `;
 
-const skillRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+let skillRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+function backupRoot() {
+  const skillsParent = dirname(skillRoot);
+  return join(dirname(skillsParent), ".onimi-pages-backups", basename(skillsParent));
+}
+
+async function ensureRealBackupRoot() {
+  const root = backupRoot();
+  await mkdir(root, { recursive: true, mode: 0o700 });
+  const stat = await lstat(root);
+  if (!stat.isDirectory() || stat.isSymbolicLink()) {
+    fail(`Backup store must be a real directory: ${root}`);
+  }
+  return root;
+}
 
 function fail(message) {
   throw new Error(message);
@@ -384,6 +405,30 @@ async function extractFiles(root, files) {
   }
 }
 
+async function installedMatchesArchive(files) {
+  const installed = await treeFiles(skillRoot);
+  if (installed.length !== files.size || installed.some(({ path, type }) => type !== "file" || !files.has(path))) {
+    return false;
+  }
+  for (const [path, bytes] of files) {
+    if (!(await readFile(join(skillRoot, ...path.split("/")))).equals(bytes)) return false;
+  }
+  return true;
+}
+
+async function fetchVerifiedArchive(entry, name) {
+  const archive = await fetchBytes(entry.archive.url, {
+    limit: Math.min(entry.archive.size + 1, MAX_ARCHIVE_BYTES),
+    timeout: 10_000,
+  });
+  if (archive.length !== entry.archive.size || sha256(archive) !== entry.archive.sha256) {
+    fail("Downloaded archive failed size or SHA-256 verification.");
+  }
+  const files = parseZip(archive, name);
+  validateArchiveFiles(files, name, entry.version);
+  return files;
+}
+
 async function commandStatus(receipt) {
   const integrity = await inspectIntegrity(skillRoot, receipt);
   const cache = await readCache(receipt.name);
@@ -403,16 +448,68 @@ async function commandStatus(receipt) {
   );
 }
 
+async function localModuleStatus(parent, name) {
+  const root = join(parent, name);
+  try {
+    await lstat(root);
+  } catch (error) {
+    if (error.code === "ENOENT") return { name, state: "missing" };
+    throw error;
+  }
+  try {
+    const receipt = await readReceipt(root);
+    const integrity = await inspectIntegrity(root, receipt);
+    return {
+      name,
+      state: integrity.clean ? "installed" : "customized",
+      version: receipt.version,
+      integrity: integrity.clean ? "clean" : "modified",
+      issues: integrity.issues,
+    };
+  } catch {
+    return {
+      name,
+      state: "present-unmanaged",
+      integrity: "unknown",
+      issues: ["No valid Onimi direct-download receipt; preserved as user-managed."],
+    };
+  }
+}
+
+async function commandSuiteStatus() {
+  const parent = dirname(skillRoot);
+  const modules = [];
+  for (const name of ["onimi-pages-creator", "onimi-pages-publish"]) {
+    modules.push(await localModuleStatus(parent, name));
+  }
+  console.log(
+    JSON.stringify(
+      {
+        suite: "onimi",
+        source: "local-filesystem",
+        modules,
+        connection: "not-inspected",
+      },
+      null,
+      2,
+    ),
+  );
+}
+
 async function commandCheck(receipt) {
   const describeCached = (cached) => {
     console.log(
       cached.error
         ? "Update check was already attempted today; the cached offline result is non-fatal."
-        : `Checked today: installed ${receipt.version}, latest ${cached.latest}.`,
+        : cached.refreshAvailable
+          ? `Same-version refresh available: ${receipt.name}@${receipt.version}. Run update with --confirm ${receipt.name}@${receipt.version}.`
+          : `Checked today: installed ${receipt.version}, latest ${cached.latest}.`,
     );
   };
+  const cacheIsCurrent = (cached) => cached && Date.now() - Date.parse(cached.checkedAt) < DAY_MS &&
+    (cached.latest !== receipt.version || typeof cached.refreshAvailable === "boolean");
   let cached = await readCache(receipt.name);
-  if (cached && Date.now() - Date.parse(cached.checkedAt) < DAY_MS) {
+  if (cacheIsCurrent(cached)) {
     describeCached(cached);
     return;
   }
@@ -429,7 +526,7 @@ async function commandCheck(receipt) {
   }
   try {
     cached = await readCache(receipt.name);
-    if (cached && Date.now() - Date.parse(cached.checkedAt) < DAY_MS) {
+    if (cacheIsCurrent(cached)) {
       describeCached(cached);
       return;
     }
@@ -437,15 +534,20 @@ async function commandCheck(receipt) {
     try {
       const entry = await fetchManifest(receipt);
       assertRuntime(entry);
+      const refreshAvailable = entry.version === receipt.version &&
+        !(await installedMatchesArchive(await fetchVerifiedArchive(entry, receipt.name)));
       await writeCache(receipt.name, {
         schemaVersion: 1,
         name: receipt.name,
         checkedAt,
         latest: entry.version,
+        refreshAvailable,
       });
       console.log(
         compareSemver(receipt.version, entry.version) < 0
           ? `Update available: ${receipt.name}@${entry.version}. Review local status, then run update with --confirm ${receipt.name}@${entry.version}.`
+          : refreshAvailable
+            ? `Same-version refresh available: ${receipt.name}@${receipt.version}. Run update with --confirm ${receipt.name}@${receipt.version}.`
           : `Up to date: ${receipt.name}@${receipt.version}.`,
       );
     } catch {
@@ -489,22 +591,14 @@ async function commandUpdate(receipt, confirmation) {
     const entry = await fetchManifest(receipt, 5000);
     assertRuntime(entry);
     if (compareSemver(entry.version, receipt.version) < 0) fail("The stable channel would downgrade this skill.");
-    if (entry.version === receipt.version) {
-      console.log(`Already current: ${receipt.name}@${receipt.version}.`);
-      return;
-    }
     if (confirmation !== `${receipt.name}@${entry.version}`) {
       fail(`Explicit confirmation required: --confirm ${receipt.name}@${entry.version}`);
     }
-    const archive = await fetchBytes(entry.archive.url, {
-      limit: Math.min(entry.archive.size + 1, MAX_ARCHIVE_BYTES),
-      timeout: 10_000,
-    });
-    if (archive.length !== entry.archive.size || sha256(archive) !== entry.archive.sha256) {
-      fail("Downloaded archive failed size or SHA-256 verification.");
+    const files = await fetchVerifiedArchive(entry, receipt.name);
+    if (await installedMatchesArchive(files)) {
+      console.log(`Already current: ${receipt.name}@${receipt.version}.`);
+      return;
     }
-    const files = parseZip(archive, receipt.name);
-    validateArchiveFiles(files, receipt.name, entry.version);
     staging = await mkdtemp(join(dirname(skillRoot), `.${receipt.name}.stage-`));
     const stagedSkill = join(staging, receipt.name);
     await mkdir(stagedSkill);
@@ -514,7 +608,7 @@ async function commandUpdate(receipt, confirmation) {
     if (!stagedIntegrity.clean) fail("Staged skill failed its complete fingerprint check.");
 
     backup = join(
-      dirname(skillRoot),
+      await ensureRealBackupRoot(),
       `${receipt.name}.backup-${receipt.version}-${new Date().toISOString().replace(/[:.]/g, "-")}`,
     );
     await lstat(backup).then(
@@ -538,8 +632,9 @@ async function commandUpdate(receipt, confirmation) {
       name: receipt.name,
       checkedAt: new Date().toISOString(),
       latest: entry.version,
+      refreshAvailable: false,
     });
-    console.log(`Updated to ${receipt.name}@${entry.version}. Backup kept at ${backup}`);
+    console.log(`Updated to ${receipt.name}@${entry.version}. Backup kept outside the skills directory at ${backup}`);
   } finally {
     if (oldMoved && backup) {
       await rename(backup, skillRoot).catch(() => {});
@@ -556,15 +651,41 @@ async function main() {
     return;
   }
   const command = args.shift();
-  if (!["status", "check", "update"].includes(command)) fail("Unknown command. Use --help.");
+  if (!["status", "suite-status", "check", "update"].includes(command)) {
+    fail("Unknown command. Use --help.");
+  }
   let confirmation;
+  let targetDirectory;
   while (args.length) {
     const option = args.shift();
-    if (option !== "--confirm" || confirmation !== undefined) fail("Unknown or duplicate option.");
-    confirmation = args.shift();
-    if (!confirmation || confirmation.startsWith("--")) fail("Missing value for --confirm.");
+    if (option === "--confirm" && confirmation === undefined) {
+      confirmation = args.shift();
+      if (!confirmation || confirmation.startsWith("--")) fail("Missing value for --confirm.");
+    } else if (option === "--dir" && targetDirectory === undefined) {
+      targetDirectory = args.shift();
+      if (!targetDirectory || !isAbsolute(targetDirectory)) fail("--dir requires an absolute skill directory.");
+    } else {
+      fail("Unknown or duplicate option.");
+    }
   }
   if (command !== "update" && confirmation !== undefined) fail("--confirm is only valid with update.");
+  if (command !== "update" && targetDirectory !== undefined) fail("--dir is only valid with update.");
+  if (targetDirectory !== undefined) {
+    const target = resolve(targetDirectory);
+    if (basename(target) !== basename(skillRoot)) {
+      fail("--dir must name the same Skill as this manager.");
+    }
+    const stat = await lstat(target).catch((error) => {
+      if (error.code === "ENOENT") fail("--dir installed skill directory does not exist.");
+      throw error;
+    });
+    if (!stat.isDirectory() || stat.isSymbolicLink()) fail("--dir must name a real installed skill directory.");
+    skillRoot = target;
+  }
+  if (command === "suite-status") {
+    await commandSuiteStatus();
+    return;
+  }
   const receipt = await readReceipt();
   if (command === "status") await commandStatus(receipt);
   else if (command === "check") await commandCheck(receipt);

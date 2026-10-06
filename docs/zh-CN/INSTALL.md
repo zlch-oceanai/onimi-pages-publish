@@ -1,7 +1,8 @@
 # 安装 Onimi Pages
 
-选择一种安装来源，然后按下方说明连接当前 Agent。安装 Skill 不会自动完成授权，
+选择一种安装来源。默认套件路径会明确准备 Creator 与 Publish，并只在云任务实际需要时连接当前 Agent。安装 Skill 不会自动完成授权，
 也不代表生产服务已完成验收。
+同一安装任务检查并补齐两个模块；创作和发布前预检使用当前 Agent 的模型，不需要另装本地模型。
 
 ## npm 安装
 
@@ -9,15 +10,18 @@ npm 包内置完整 Skill 和无第三方依赖的本地安装器，不从 GitHu
 需要 Node.js 20 或以上版本，以及 npm。
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --agent codex --lang zh-CN
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --suite --agent codex --lang zh-CN
 ```
 
 将 `codex` 替换为 `claude-code` 或 `cursor`，只安装到当前 Agent。
 其他客户端请先查明个人技能目录，再使用 `install --dir /技能父目录的绝对路径 --lang zh-CN`。
-安装器会在父目录内创建 `onimi-pages-publish` 文件夹；已有目录会保留并停止安装。
+套件安装器会在父目录内补齐 `onimi-pages-creator` 与 `onimi-pages-publish` 文件夹；所有已有目录和个人修改都会原样保留。
+如果原来已安装旧版 Publish，补装 Creator 后也要核对两个模块的版本；“目录已存在”不等于新版套件就绪。旧模块按原渠道更新，个人修改先保留，不能安全更新时先说明限制，不直接覆盖。
+只有“仅发布已有 HTML”的高级兼容任务才省略 `--suite`。
 安装后按需重新加载 Agent。使用市场渠道前，请查看
 https://downloads.onimi.ai/skills/manifest.json 中的已验证渠道状态。npm 渠道标记为可用时
-再运行上面的 `@latest` 命令；尚不可用时，请选择清单中另一个已标记为可用的渠道。
+且其版本等于 `skills.publish.version` 时，才运行上面的 `@latest` 套件命令；旧的可用 Publish
+包可能尚未包含套件安装器。否则选择清单中版本已对齐的渠道。
 
 查看完整参数：
 
@@ -27,14 +31,17 @@ npx --registry=https://registry.npmjs.org onimi-pages-publish@latest --help
 
 ## 直接下载
 
-从稳定清单读取 `skills.publish.archive.url`、`sha256` 和 `size`：
+套件安装从稳定清单读取完整的 `skills.creator.archive.url`、
+`skills.creator.archive.sha256`、`skills.creator.archive.size`，以及对应的
+`skills.publish.archive.url`、`skills.publish.archive.sha256`、
+`skills.publish.archive.size`：
 
 - https://downloads.onimi.ai/skills/manifest.json
 
-下载该准确的不可变版本归档。先校验字节数，再使用 `shasum -a 256`（macOS）、
+下载两个准确的不可变版本归档。分别校验字节数，再使用 `shasum -a 256`（macOS）、
 `sha256sum`（Linux）或 PowerShell `Get-FileHash -Algorithm SHA256` 校验 SHA-256，然后解压。
-将完整的 `onimi-pages-publish/` 文件夹放进当前 Agent 的个人技能父目录，不要只复制
-SKILL.md，也不要覆盖已有的个人修改。
+仅补入缺失的 `onimi-pages-creator/` 或 `onimi-pages-publish/` 完整文件夹，不要只复制
+SKILL.md，也不要覆盖任一已有目录或个人修改。仅发布已有 HTML 的高级路径只需 Publish 条目。
 
 | 客户端 | 个人技能父目录 |
 | --- | --- |
@@ -96,7 +103,7 @@ Skill 安装与 MCP 配置是独立步骤。支持依赖声明的宿主可读取
 
 ```sh
 codex mcp add onimi-pages --url https://onimi.ai/mcp --oauth-client-registration dcr --oauth-resource https://onimi.ai/mcp
-codex mcp login onimi-pages --oauth-client-registration dcr --scopes project:read,project:write,release:read,release:publish
+codex mcp login onimi-pages --oauth-client-registration dcr --scopes project:read,project:write,draft:read,draft:write,template:read,release:read,release:publish,collaboration:manage
 ```
 
 添加连接时可能已经触发授权，若已连接成功，无需重复登录。
@@ -132,8 +139,10 @@ WorkBuddy、千问办公、豆包桌面端、百度搭子等客户端需分别�
 如果尚未登录 Onimi Pages，用户先登录，再查看并确认访问权限。
 Agent 不应代替用户点击授权，也不应索要聊天中的 Token。凭证保存与刷新由客户端负责。
 
-授权后调用 `onimi_list_projects` 验证连接，空项目列表也是有效结果。
-安装验证不创建项目或发布页面；首次发布时，请明确要求创建新项目。
+授权前先调用 `onimi_get_connection`；只有账号相同且 effective scopes 覆盖当前任务时才复用。
+授权后再次调用它；该工具返回连接身份与 scope，但安装模块必须在客户端本地检查。
+旧服务没有该工具时才用 `onimi_list_projects` 做只读兼容核对，空项目列表也是有效结果。
+安装验证不创建项目、不读取私有草稿、不获取模板，也不发布内容。
 
 在 `https://onimi.ai/dashboard/connections` 可撤销授权。撤销连接不会自动下线已发布页面。
 

@@ -7,7 +7,7 @@
   "description_en": "Beta connector for publishing standalone HTML through browser-authorized Remote MCP.",
   "source": "onimi-pages",
   "type": "mcp",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "minWorkbuddyVersion": "4.24.0",
   "examples_zh": [
     "列出我的 Onimi Pages 项目",

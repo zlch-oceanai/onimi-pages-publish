@@ -1,28 +1,34 @@
 # Install Onimi Pages Creator
 
-Choose one verified source and install the complete `onimi-pages-creator` folder for only the current
-agent. Installation runs locally. It does not connect an account, send a prompt to Onimi Pages, or
-publish a page.
+The default Onimi setup explicitly prepares Creator and Publish for the current agent while preserving
+existing folders and local changes. Installation runs locally. It does not connect an account, send a
+prompt to Onimi Pages, or publish a page.
+Give both modules to the current agent as one installation task. Creation and prepublish checks use
+the model this agent already uses; no separate local model installation is needed.
 
 ## npm
 
-Use npm's `latest` release only after the npm channel is marked available in the
-[stable manifest](https://downloads.onimi.ai/skills/manifest.json). Node.js 20 or later is required.
+Use npm's `latest` suite only when the Publish npm channel is available and its channel version equals
+the current Publish version in the [stable manifest](https://downloads.onimi.ai/skills/manifest.json).
+An older available package may not contain `install --suite`. Node.js 20 or later is required.
 
 ```sh
-npx --registry=https://registry.npmjs.org onimi-pages-creator@latest install --agent codex
+npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --suite --agent codex
 ```
 
 Replace `codex` with `claude-code` or `cursor`. For another client, use its documented personal skills
-directory with `install --dir /absolute/path/to/skills`. The installer preserves an existing target and
-performs no network, account, or publishing action.
+directory with `install --suite --dir /absolute/path/to/skills`. The installer adds only missing modules
+and performs no network, account, or publishing action. The standalone `onimi-pages-creator` package
+remains an advanced local-only option.
 
 ## Direct download
 
-Read `skills.creator.archive.url`, `sha256`, and `size` from the
-[stable manifest](https://downloads.onimi.ai/skills/manifest.json). Download that immutable archive URL,
-verify both values, then extract it. Copy the complete folder without overwriting local changes. This
-flow does not depend on the website's latest-redirect route being deployed first.
+Read the complete `skills.creator.archive.url`, `skills.creator.archive.sha256`, and
+`skills.creator.archive.size` fields plus the matching `skills.publish.archive.url`,
+`skills.publish.archive.sha256`, and `skills.publish.archive.size` fields from the
+[stable manifest](https://downloads.onimi.ai/skills/manifest.json). Download both immutable archive
+URLs, verify each byte size and SHA-256, then add only a missing complete folder. This flow preserves
+both existing modules and does not depend on the website's latest-redirect route being deployed first.
 
 | Client | Personal skills parent directory |
 | --- | --- |
@@ -49,12 +55,13 @@ npx --registry=https://registry.npmjs.org clawhub@0.23.3 install @mariohazy/onim
 
 ## Verify and use
 
-Restart or reload the current agent if required, then ask it to create one local HTML page. The Skill
-includes `scripts/validate-html.mjs`; validation and browser preview do not publish the file.
+Restart or reload the current agent if required, then ask it to create one local Page or Bento-based
+Slides artifact. The Skill includes `scripts/validate-html.mjs`; validation and browser preview do not
+publish the file.
 
-Creation and publication are separate. If you later ask to publish, install `onimi-pages-publish` from
-a verified channel and follow its browser OAuth guide. Never substitute a test service URL in a public
-installation.
+Creation and publication are separate. The suite may already have prepared Publish, but browser OAuth
+starts only when a cloud template, cloud draft, cloud Slides or publication task needs it. Reuse a valid
+same-account connection with sufficient scopes. Never substitute a test service URL.
 
 The bundled manager applies only when a direct-download installation has `.onimi-skill.json` beside
 `SKILL.md`; if the receipt is absent, use that channel's native update flow. For a receipt-backed

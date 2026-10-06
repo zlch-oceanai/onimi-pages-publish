@@ -44,6 +44,31 @@ for (const input of files) {
     problems.push("contains an external form action")
   }
 
+  const artifact = html.match(
+    /<script\b(?=[^>]*\bid=["']onimi-artifact["'])[^>]*>([\s\S]*?)<\/script>/i,
+  )
+  if (artifact) {
+    try {
+      const manifest = JSON.parse(artifact[1])
+      if (manifest?.data?.mode === "controlled-cloud") {
+        for (const form of html.matchAll(/<form\b[^>]*>[\s\S]*?<\/form>/gi)) {
+          for (const control of form[0].matchAll(/<(button|input)\b[^>]*>/gi)) {
+            const tag = control[0]
+            const typeAttribute = tag.match(/\s+type\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i)
+            const type = (typeAttribute?.[1] ?? typeAttribute?.[2] ?? typeAttribute?.[3])?.toLowerCase()
+            if ((control[1].toLowerCase() === "button" && (!type || type === "submit")) ||
+                (control[1].toLowerCase() === "input" && (type === "submit" || type === "image"))) {
+              problems.push("controlled-cloud forms must use a type=button SDK click handler; native submit is blocked by the runtime sandbox")
+              break
+            }
+          }
+        }
+      }
+    } catch {
+      problems.push("onimi-artifact manifest is not valid JSON")
+    }
+  }
+
   if (problems.length) {
     failed = true
     console.error(`${input}:\n- ${problems.join("\n- ")}`)

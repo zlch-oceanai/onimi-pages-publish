@@ -1,19 +1,56 @@
-# Onimi Pages Publish
+# Onimi · Creator + Publish
 
 [English](../../README.md) | **简体中文**
 
-在 Agent 对话中，通过浏览器授权发布 HTML 页面。
+在 Agent 中创作 Pages 与 Slides，再通过浏览器授权保存或发布。
 
 ## 安装
 
 选择市场渠道前，请先查看[已验证的渠道状态](https://downloads.onimi.ai/skills/manifest.json)。
-npm 渠道标记为可用时再安装其 `latest` 版本；尚不可用时，请选择另一个已标记为可用的渠道。
+Publish npm 渠道可用且其渠道版本等于当前 Publish 版本时，才安装 `latest` 套件；否则选择版本已对齐的渠道。
 
+默认 Onimi 入口会明确准备 `onimi-pages-creator` 与 `onimi-pages-publish` 两个模块。
 把下面的提示词复制到当前 Agent：
 
-> 请从 https://downloads.onimi.ai/skills/manifest.json 读取 `skills.publish.archive.url`、`sha256` 和 `size`，下载该准确的 Onimi Pages Publish 归档，并校验 SHA-256 和字节数。将完整文件夹安装到当前 Agent 的个人技能目录，保留已有安装。阅读安装包内的中文连接指南，添加 `https://onimi.ai/mcp` 并发起浏览器 OAuth，让我完成登录和权限确认。授权后调用 `onimi_list_projects` 验证连接。本次只安装和连接，不创建项目或发布页面。
+> 请读取 https://downloads.onimi.ai/skills/manifest.json 中 Creator 与 Publish 的条目，检查当前 Agent 个人 Skill 目录的真实本地状态。保留已有目录和个人修改，只下载、校验并补齐缺失模块。本地创作不需要账号；云任务开始前先调用 `onimi_get_connection`，同账号连接的 scope 足够时直接复用，否则说明申请的访问范围并发起浏览器 OAuth 让我确认。不要索要 Token。本次不创建项目、不发布。
 
-各来源均提供完整 Skill 文件。安装与浏览器授权是两个步骤，具体命令见[安装说明](INSTALL.md)。
+npm 套件命令为
+`npx --registry=https://registry.npmjs.org onimi-pages-publish@latest install --suite --agent codex`。
+直接下载会分别解析并校验两个不可变归档。安装、连接和原任务续接是三个可分别恢复的阶段，
+具体说明见[安装说明](INSTALL.md)。只发布已有 HTML 的高级兼容方式仍可省略 `--suite`，仅安装 Publish。
+多步云写入前，Publish 会在本机建立 `0600` 私有任务账本，固定项目、草稿／配置／发布引用、
+mutation ID 和脱敏回执。新会话只恢复未完成步骤；源稿、提示词、OAuth 材料和一次性分享秘密不会落盘。
+
+### 升级已有 Publish 0.2.1 目录
+
+待 0.3.1 Publish 安装包公开且核对下载包版本后，对当前 `onimi-pages-publish`
+目录的**父目录**执行以下命令。它们不连接 Onimi、不更改 MCP 连接，也不操作 WorkBuddy 安装。
+
+```sh
+npx --registry=https://registry.npmjs.org onimi-pages-publish@0.3.1 legacy-plan --dir /绝对路径/skills
+npx --registry=https://registry.npmjs.org onimi-pages-publish@0.3.1 legacy-upgrade --dir /绝对路径/skills --confirm onimi-pages-publish@0.3.1
+```
+
+安装器只接受与公开 0.2.1 完全一致的安装回执。无定制目录升级后，完整旧目录保存在技能扫描目录之外；
+以上述路径为例，位置是 `../.onimi-pages-backups/skills/onimi-pages-publish.backup-legacy-0.2.1-*`。
+重复执行不会再建备份。
+
+如检查发现本地改动，直接升级会拒绝切换。先生成独立的 0.3.1 候选目录，逐项审阅并合并
+改过的受管理文件。新增的个人文件会逐字节复制到候选目录；修改过的指令不会自动合并。
+
+```sh
+npx --registry=https://registry.npmjs.org onimi-pages-publish@0.3.1 legacy-prepare --dir /绝对路径/skills
+# 审阅并合并 ../.onimi-pages-migrations/skills/onimi-pages-publish.legacy-candidate-0.3.1 中的文件。
+npx --registry=https://registry.npmjs.org onimi-pages-publish@0.3.1 legacy-upgrade --dir /绝对路径/skills --confirm onimi-pages-publish@0.3.1 --reviewed-customizations
+```
+
+最终切换成功前，旧目录始终保持活动。切换前会核对人工审阅的修改文件与新版基线确有差异，
+个人新增文件与旧目录字节一致；切换后仍保留完整旧目录备份。准备候选后如旧目录又变化，
+切换会拒绝，应把旧候选移走后重新准备。无法识别或缺少安装回执的目录必须人工核对来源，
+此命令不会替换。
+如果进程中断后活动目录缺失、升级锁仍在，可执行
+`npx --registry=https://registry.npmjs.org onimi-pages-publish@0.3.1 legacy-recover --dir /绝对路径/skills`。它校验记录中的旧版备份，
+仅在活动目录不存在时恢复。激活后的人工合并候选仍被视为本地定制，以后更新时也须处理这些修改。
 
 也可以选择其他安装来源：
 
@@ -52,9 +89,11 @@ Agent 读取 HTML、创建你要求的新项目并发布页面，返回稳定链
 仓库仅包含公开分发文件，不包含私有应用代码或凭证。
 Skill 和安装器使用 MIT-0 许可证，与 ClawHub 发布条款一致；托管服务适用独立条款。
 
-## 0.2.1
+## 0.3.1
 
-- 稳定清单、不可变归档，以及保护本地修改的更新管理器。
+- 一个明确的 Onimi 套件命令，保留已有模块，只补缺失模块。
+- 稳定清单、不可变归档，以及报告真实本地状态的离线 `suite-status`。
+- 用于安全重试与跨会话续接的本机私有任务回执。
 - 中英文安装说明分开，默认英文。
 - 提供中英文演示视频和封面。
 
